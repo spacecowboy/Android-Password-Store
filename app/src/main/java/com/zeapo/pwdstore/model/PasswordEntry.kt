@@ -77,13 +77,11 @@ class PasswordEntry(content: String, private val totpFinder: TotpFinder = UriTot
     }
 
     private fun findUsername(): String? {
-        extraContent.splitToSequence("\n").forEach { line ->
-            for (prefix in USERNAME_FIELDS) {
-                if (line.startsWith(prefix, ignoreCase = true))
-                    return line.substring(prefix.length).trimStart()
-            }
-        }
-        return null
+        return extraContent
+            .splitToSequence("\n")
+            .firstOrNull()
+            ?.trim()
+            ?.ifBlank { null }
     }
 
     private fun findAndStripPassword(passContent: List<String>): Pair<String, List<String>> {
